@@ -57,7 +57,7 @@ public final class LiveSession: Sendable {
   /// formats](https://firebase.google.com/docs/ai-logic/live-api/limits-and-specs#media-formats).
   ///
   /// - Parameters:
-  ///   - audio: Raw 16-bit PCM audio at 16Hz, used to update the model on the client's
+  ///   - audio: Raw 16-bit PCM audio at 16kHz, used to update the model on the client's
   ///     conversation.
   public func sendAudioRealtime(_ audio: Data) async {
     let message = BidiGenerateContentRealtimeInput(
@@ -79,8 +79,8 @@ public final class LiveSession: Sendable {
   /// - Parameters:
   ///   - video: Encoded image data extracted from a frame of the video, used to update the model on
   ///     the client's conversation.
-  ///   - mimeType: The IANA standard MIME type of the video frame data (eg; `images/png`,
-  ///     `images/jpeg`etc.,).
+  ///   - mimeType: The IANA standard MIME type of the video frame data (e.g., `image/png`,
+  ///     `image/jpeg`, etc.).
   public func sendVideoRealtime(_ video: Data, mimeType: String) async {
     let message = BidiGenerateContentRealtimeInput(
       video: InlineData(data: video, mimeType: mimeType)
@@ -184,7 +184,7 @@ public final class LiveSession: Sendable {
   ///
   /// To obtain a valid handle, ensure you pass an instance of
   /// ``SessionResumptionConfig`` to ``LiveGenerativeModel/connect(sessionResumption:)``,
-  /// and then listen for the hande provided from a ``LiveSessionResumptionUpdate``
+  /// and then listen for the handle provided from a ``LiveSessionResumptionUpdate``
   /// server message.
   ///
   /// - Parameters:

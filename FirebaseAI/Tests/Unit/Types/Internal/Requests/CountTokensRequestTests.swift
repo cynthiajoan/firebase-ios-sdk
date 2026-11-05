@@ -111,4 +111,43 @@ final class CountTokensRequestTests: XCTestCase {
     }
     """)
   }
+
+  // MARK: CountTokensResponse Decoding
+
+  func testDecodeCountTokensResponse_withPromptTokensDetails() throws {
+    let json = """
+    {
+      "totalTokens": 123,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 100
+        },
+        {
+          "modality": "AUDIO",
+          "tokenCount": 23
+        }
+      ]
+    }
+    """
+    let jsonData = try XCTUnwrap(json.data(using: .utf8))
+
+    let response = try JSONDecoder().decode(CountTokensResponse.self, from: jsonData)
+
+    XCTAssertEqual(response.totalTokens, 123)
+    XCTAssertEqual(response.promptTokensDetails.count, 2)
+    XCTAssertEqual(response.promptTokensDetails[0].modality, .text)
+    XCTAssertEqual(response.promptTokensDetails[0].tokenCount, 100)
+    XCTAssertEqual(response.promptTokensDetails[1].modality, .audio)
+    XCTAssertEqual(response.promptTokensDetails[1].tokenCount, 23)
+  }
+
+  func testDecodeCountTokensResponse_emptyJSONDefaultsToZero() throws {
+    let jsonData = try XCTUnwrap("{}".data(using: .utf8))
+
+    let response = try JSONDecoder().decode(CountTokensResponse.self, from: jsonData)
+
+    XCTAssertEqual(response.totalTokens, 0)
+    XCTAssertTrue(response.promptTokensDetails.isEmpty)
+  }
 }
